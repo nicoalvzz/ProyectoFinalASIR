@@ -1,0 +1,15 @@
+subdominio {
+    route {
+        handle_path /api/* {
+            reverse_proxy IP:3000
+        }
+
+        handle {
+            reverse_proxy IP:3001
+        }
+    }
+}
+
+subdominio {
+    reverse_proxy IP:3000
+}

@@ -1,0 +1,251 @@
+/* ESTRUCTURA ORIGINAL (primer CSS) con COLORES/EFECTOS del segundo */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #2b2d42, #4a4e69); /* Fondo oscuro del segundo CSS */
+  color: #edf2f4; /* Texto claro */
+  transition: all 0.4s ease; /* Transición añadida */
+}
+
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #ef233c; /* Rojo vibrante del segundo CSS */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease; /* Efecto añadido */
+}
+
+.app-title:hover {
+  text-shadow: 0 0 8px rgba(239, 35, 60, 0.6); /* Efecto hover del segundo CSS */
+}
+
+/* Botones (estructura original con efectos nuevos) */
+.btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  margin: 0.3rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto neón del segundo CSS */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+/* Colores del segundo CSS */
+.btn.green { 
+  background-color: #2ec4b6;
+  box-shadow: 0 0 5px #2ec4b6;
+}
+.btn.green:hover { 
+  background-color: #1ba098;
+  box-shadow: 0 0 15px #2ec4b6;
+}
+
+.btn.red { 
+  background-color: #ff006e;
+  box-shadow: 0 0 5px #ff006e;
+}
+.btn.red:hover { 
+  background-color: #d8005e;
+  box-shadow: 0 0 15px #ff006e;
+}
+
+/* Tarjetas (estructura original con efectos nuevos) */
+.movie-form, .movie-card {
+  background: #edf2f4; /* Color del segundo CSS */
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  color: #2b2d42; /* Texto oscuro para contraste */
+  transition: all 0.3s ease; /* Efecto añadido */
+}
+
+.movie-card:hover {
+  transform: translateY(-5px); /* Efecto hover del segundo CSS */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.movie-info {
+  flex: 1;
+}
+
+.movie-info .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.poster {
+  width: 160px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Metadatos (estilo original con color nuevo) */
+.meta {
+  font-style: italic;
+  color: #8d99ae; /* Color del segundo CSS */
+}
+
+/* Efecto emoji palomitas del segundo CSS */
+.emoji-popcorn {
+  font-size: 6rem;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+  transition: all 0.5s ease;
+}
+
+.emoji-popcorn:hover {
+  transform: rotate(360deg) scale(1.2);
+  text-shadow: 0 0 15px #ffbe0b;
+}
+
+/* Resto de estructura ORIGINAL (sin modificar) */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-group input:focus {
+  border-color: #3a86ff; /* Efecto focus del segundo CSS */
+  box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+  outline: none;
+}
+
+.empty {
+  text-align: center;
+  color: #8d99ae; /* Color del segundo CSS */
+  font-size: 1.2rem;
+}
+
+/* Añade esto al final de tu CSS actual (sin modificar lo demás) */
+
+/* 1. Corrección del emoji de palomitas (efecto giratorio completo) */
+.emoji-popcorn {
+  transition: all 0.5s ease !important;
+  display: inline-block !important;
+}
+.emoji-popcorn:hover {
+  transform: rotate(360deg) scale(1.2) !important;
+  text-shadow: 0 0 15px #ffbe0b !important;
+}
+/* 2. Restaurar colores específicos de botones (Editar/Ver/Actualizar) */
+/* Botón EDITAR - Azul brillante */
+.btn.blue { 
+  background-color: #3a86ff;
+  box-shadow: 0 0 5px #3a86ff;
+}
+.btn.blue:hover { 
+  background-color: #2667cc;
+  box-shadow: 0 0 15px #3a86ff;
+}
+
+/* Botón VER PELÍCULAS - Verde esmeralda */
+.btn.green { 
+  background-color: #2ec4b6;
+  box-shadow: 0 0 5px #2ec4b6;
+}
+.btn.green:hover { 
+  background-color: #1ba098;
+  box-shadow: 0 0 15px #2ec4b6;
+}
+
+/* Botón ACTUALIZAR - Amarillo vibrante */
+.btn.yellow { 
+  background-color: #ffbe0b !important;
+  box-shadow: 0 0 5px #ffbe0b !important;
+  color: #2b2d42 !important;
+}
+.btn.yellow:hover { 
+  background-color: #e6a800 !important;
+  box-shadow: 0 0 15px #ffbe0b !important;
+}
+
+/* BOTÓN ACTUALIZAR EN NARANJA CON EFECTO NEÓN */
+button[type="submit"], 
+.btn-update {
+  background-color: #FF7B25 !important;  /* Naranja vibrante */
+  color: white !important;
+  box-shadow: 0 0 5px #FF7B25 !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+button[type="submit"]:hover, 
+.btn-update:hover {
+  background-color: #E56A1B !important;  /* Naranja más oscuro al hover */
+  box-shadow: 0 0 15px #FF7B25 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Efecto de brillo al pasar el ratón (como los otros botones) */
+button[type="submit"]::before, 
+.btn-update::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: 0.5s;
+  z-index: -1;
+}
+
+button[type="submit"]:hover::before, 
+.btn-update:hover::before {
+  left: 100%;
+}

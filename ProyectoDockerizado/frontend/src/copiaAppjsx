@@ -1,0 +1,187 @@
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [movies, setMovies] = useState([]);
+  const [formVisible, setFormVisible] = useState(false);
+  const [form, setForm] = useState({
+    title: '',
+    description: '',
+    genre: '',
+    director: '',
+    releaseDate: '',
+    rating: '',
+    actors: '',
+    posterUrl: '',
+  });
+  const [editId, setEditId] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    fetchMovies();
+  }, []);
+
+  const fetchMovies = async () => {
+    try {
+      const res = await fetch(`${API_URL}/movies`);
+      const data = await res.json();
+      setMovies(data);
+    } catch (error) {
+      console.error("Error al obtener películas:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const movieData = {
+      ...form,
+      actors: form.actors.split(',').map(actor => actor.trim()),
+    };
+
+    try {
+      const method = editId ? 'PUT' : 'POST';
+      const endpoint = editId ? `${API_URL}/movies/${editId}` : `${API_URL}/movies`;
+
+      const res = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(movieData),
+      });
+
+      if (res.ok) {
+        fetchMovies();
+        resetForm();
+        setFormVisible(false);
+      }
+    } catch (error) {
+      console.error("Error al guardar película:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await fetch(`${API_URL}/movies/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setMovies(movies.filter(m => m._id !== id));
+      }
+    } catch (err) {
+      console.error("Error al eliminar:", err);
+    }
+  };
+
+  const handleEdit = (movie) => {
+    setForm({
+      title: movie.title,
+      description: movie.description,
+      genre: movie.genre,
+      director: movie.director,
+      releaseDate: movie.releaseDate.slice(0, 10),
+      rating: movie.rating,
+      actors: movie.actors.join(', '),
+      posterUrl: movie.posterUrl,
+    });
+    setEditId(movie._id);
+    setFormVisible(true);
+  };
+
+  const resetForm = () => {
+    setForm({
+      title: '',
+      description: '',
+      genre: '',
+      director: '',
+      releaseDate: '',
+      rating: '',
+      actors: '',
+      posterUrl: '',
+    });
+    setEditId(null);
+  };
+
+  return (
+    <div className="bg-[#0f172a] text-[#dceaff] min-h-screen p-6 font-sans">
+      <h1 className="text-4xl font-bold mb-6 text-center">🎬 Películas</h1>
+
+      <div className="flex justify-center gap-4 mb-6">
+        {!formVisible ? (
+          <button
+            onClick={() => setFormVisible(true)}
+            className="bg-green-600 hover:bg-green-700 px-5 py-2 rounded-lg font-semibold text-white"
+          >
+            ➕ Añadir Película
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setFormVisible(false);
+              resetForm();
+            }}
+            className="bg-blue-600 hover:bg-blue-800 px-5 py-2 rounded-lg font-semibold text-white"
+          >
+            📃 Ver Películas
+          </button>
+        )}
+      </div>
+
+      {formVisible ? (
+        <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-xl mx-auto mb-10">
+          <h2 className="text-2xl font-bold mb-4">{editId ? "Editar Película" : "Añadir Película"}</h2>
+          {["title", "description", "genre", "director", "releaseDate", "rating", "actors", "posterUrl"].map(field => (
+            <div key={field} className="mb-3">
+              <label className="block text-sm mb-1 capitalize">{field === "posterUrl" ? "Poster URL" : field}</label>
+              <input
+                type={field === "releaseDate" ? "date" : "text"}
+                name={field}
+                value={form[field]}
+                onChange={handleChange}
+                className="w-full px-3 py-2 rounded bg-gray-700 text-white"
+              />
+            </div>
+          ))}
+          <button type="submit" className="bg-green-600 hover:bg-green-800 px-4 py-2 rounded text-white font-bold mt-2">
+            {editId ? "Actualizar" : "Añadir"}
+          </button>
+        </form>
+      ) : (
+        <div className="space-y-6">
+          {movies.length === 0 ? (
+            <p className="text-center text-gray-400">No hay películas aún.</p>
+          ) : (
+            movies.map(movie => (
+              <div key={movie._id} className="bg-white text-black rounded-lg p-4 shadow-lg max-w-2xl mx-auto">
+                <h2 className="text-2xl font-bold mb-2">{movie.title} ⭐ {movie.rating}</h2>
+                <p className="text-sm text-gray-600">Género: {movie.genre}</p>
+                <p className="text-sm">Director: {movie.director}</p>
+                <p className="text-sm">Fecha de estreno: {new Date(movie.releaseDate).toLocaleDateString()}</p>
+                <p className="mt-2">{movie.description}</p>
+                <p className="text-sm italic mt-1">Actores: {movie.actors.join(", ")}</p>
+                {movie.posterUrl && (
+                  <img src={movie.posterUrl} alt={`Poster de ${movie.title}`} className="mt-3 w-full max-w-xs rounded" />
+                )}
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={() => handleEdit(movie)}
+                    className="bg-yellow-500 hover:bg-yellow-700 text-white px-4 py-1 rounded"
+                  >
+                    ✏ Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(movie._id)}
+                    className="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded"
+                  >
+                    🗑 Eliminar
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;

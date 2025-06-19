@@ -1,0 +1,80 @@
+name: Ejecutar pruebas de Playwright, Cypress y Karate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  karate:
+    name: Ejecutar pruebas Karate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: KarateProject/KarateProject/PruebasKarate
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Instalar Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Instalar Maven y ejecutar Karate
+        run: mvn test -Dtest=KarateRunner
+
+  cypress:
+    name: Ejecutar pruebas Cypress
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: PruebaCypress/PruebaCypress/cypress-e2e-framework
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar Cypress (manual)
+        run: npm install --save-dev cypress
+
+      - name: Ejecutar pruebas Cypress por CLI
+        run: npx cypress run --spec "cypress/e2e/**/*.cy.{js,ts}"
+
+
+
+  playwright:
+    name: Ejecutar pruebas Playwright
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: PruebasPlaywright/PruebasPlaywright
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Instalar browsers
+        run: npx playwright install --with-deps
+
+      - name: Ejecutar pruebas Playwright
+        run: npx playwright test
+
