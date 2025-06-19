@@ -88,6 +88,80 @@ jobs:
       - run: npx playwright install --with-deps
       - run: npx playwright test
 ```
+### docker-compose.yaml
+
+```yaml
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+  mongodb:
+    image: mongo:6
+    container_name: my-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+
+  api:
+    build: ./api
+    container_name: movies-api
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api/.env
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    container_name: movies-frontend
+    restart: always
+    ports:
+      - "3001:3000"
+    depends_on:
+      - api
+
+volumes:
+  caddy_data:
+  caddy_config:
+  mongo_data:
+```
+
+### Caddyfile
+
+```
+subdominio {
+    route {
+        handle_path /api/* {
+            reverse_proxy IP:3000
+        }
+
+        handle {
+            reverse_proxy IP:3001
+        }
+    }
+}
+
+subdominio {
+    reverse_proxy IP:3000
+}
+```
+
 
 ## 🎯 Objetivo del Proyecto
 
